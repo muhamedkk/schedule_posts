@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}   
+{% load static %}
+
+
+{% block body %}
+  <div class='container pb-5'>
+
+    {% for post in posts %}
+    <div class='card-container mt-5'>
+        <div class="card text-center">
+        <div class="card-header">
+            <div class='d-flex justify-content-between m-0'> 
+                <div>
+                    <div>
+                        <h5 ><i class="fa-solid fa-user-pen "></i></h5>
+                        <p>{{post.author}}</p>
+                    </div>
+                    <div class='published'>
+                        <h5 ><i class="fa-solid fa-clock"></i></h5>
+                        <p>{{post.scheduled_time}}</p>
+                    </div>
+                    
+                </div>
+            
+                
+            </div>
+        </div>
+        <div class="card-body">
+            <p class='m-0'>
+                {{post.content}}
+            </p>
+        </div>
+        <div class="card-footer text-body-secondary">
+            <div>
+                <h5 class='pointer'><i class="fa-solid fa-thumbs-up"></i></h5>
+                <p>5</p>
+            </div>
+            <div>
+                <h5 class='pointer'>Comments</h5>
+                <p>2</p>
+            </div>
+        </div>
+        </div>
+        
+        
+    </div>
+    {% endfor %}
+
+    {% if posts.count == 0 %}
+    <h1 class='text-center mt-5' style='color:#ffffff;border:3px  #ffffff;'>No Post</h1>
+    {% endif %}
+
+  </div>
+{% endblock body %}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}   
+{% load static %}
+
+
+{% block body %}
+
+{% if messages %}
+{% for message in messages %}
+    <div class="alert alert-{{message.tags}} m-0" style='text-align: center' role="alert" >
+    {{message}}
+  </div>
+{% endfor %}
+{% endif %}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="card text-center">
+            <div class="card-body">
+                <form method='POST' action=''>
+                    {% csrf_token %}
+                    <div class="mb-3 input ">
+                        <label for="post" class="form-label">Post Content</label>
+                        <textarea class="form-control" id="post" name='post' rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3  input">
+                        <label for="date" class="form-label">Date Of Publication</label>
+                        <input  type="datetime-local" class="form-control" id="date" name='publishing'  required>
+                    </div>
+                    </div>
+                    <div class="card-footer text-body-secondary pb-3 " style='border:none'>
+                        <button type="submit" class="btn _btn-primary d-flex align-items-center gap-3">
+                            <p class='m-0'>Post</p>
+                        </button>
+                    </div>
+                </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% for post in posts %}
+<div class="modal fade" id="Modal{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="card text-center">
+            <div class="card-body">
+                <form method='POST' action="{% url 'app:edit_post' post.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3 input ">
+                        <label for="post" class="form-label">Post Content</label>
+                        <textarea class="form-control" id="post" name='post' rows="3" required>{{post.content}}</textarea>
+                    </div>
+                    <div class="mb-3  input">
+                        <label for="date" class="form-label">Date Of Publication</label>
+                        <input value='{{post.scheduled_time|date:"Y-m-d H:i:s"}}'  type="datetime-local" class="form-control" id="date" name='publishing'  required>
+                    </div>
+                    </div>
+                    <div class="card-footer text-body-secondary pb-3 " style='border:none'>
+                        <button type="submit" class="btn _btn-primary d-flex align-items-center gap-3">
+                            <p class='m-0'>Edit</p>
+                        </button>
+                    </div>
+                </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endfor %}
+
+  
+  <div class='container py-5'>
+
+    <div class="card text-center mb-5">
+        <div class="card-body row">
+            <div class='d-flex align-items-center justify-content-center col-md-6 col-12 py-3'>
+                <div class='d-flex align-items-center gap-2 primary_color me-3' >
+                    <i style='font-size:25px' class="fa-solid fa-circle-user"></i>
+                    <h5 class='m-0 fw-bold'>Name :</h5>
+                </div>
+                <h5 style='color:#ffffff;margin:0'>{{user}}</h5>
+            </div>
+            <div class='d-flex align-items-center justify-content-center  col-md-6 col-12 py-3'>
+                <div class='d-flex align-items-center gap-2 primary_color me-3' >
+                    <i style='font-size:25px' class="fa-regular fa-copy"></i>
+                    <h5 class='m-0 fw-bold'>Posts Count :</h5>
+                </div>
+                <h5 style='color:#ffffff;margin:0'>{{posts.count}}</h5>
+            </div>
+        </div>
+    </div>
+    <div class='d-flex justify-content-between align-items-center'>
+        <h1 style='color:#ffffff'>My Posts</h1>
+        <button type="submit" class="btn _btn-primary d-flex align-items-center gap-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <p class='m-0'>Add Post</p>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+    <hr style='color:#ffffff'>
+    {% for post in posts %}
+    <div class='card-container mt-5'>
+        <div class="card text-center">
+        <div class="card-header">
+            <div class='d-flex justify-content-between m-0'> 
+                <div>
+                    <div>
+                        <h5 ><i class="fa-solid fa-user-pen "></i></h5>
+                        <p>{{post.author}}</p>
+                    </div>
+                    <div class='published'>
+                        <h5 ><i class="fa-solid fa-clock"></i></h5>
+                        <p>{{post.scheduled_time}}</p>
+                    </div>
+                    
+                </div>
+                <div>
+                    {% if post.is_published %}
+                    <p style='color:green'>published</p>
+                    {% else %}
+                    <p style='color:red'>Not published</p>
+                    {% endif %}
+                </div>
+                <div class='m-0 dropdown'>
+                    <i class="fa-solid fa-ellipsis-vertical primary_color  " style='font-size: xx-large;' type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                    <ul class="dropdown-menu" style='background-color:#18191a'>
+                        <li>
+                            <a href="{% url 'app:delete_post' post.id %}" class="dropdown-item d-flex justify-content-between align-items-center" href="#">
+                                <p >Delete</p> 
+                                <i class="fa-solid fa-trash" style='color:red'></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#Modal{{post.id}}">
+                                <p >Edit</p> 
+                                <i class="fa-solid fa-pen-to-square" style="color:green;"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class='m-0'>
+                {{post.content}}
+            </p>
+        </div>
+        <div class="card-footer text-body-secondary">
+            <div>
+                <h5 class='pointer'><i class="fa-solid fa-thumbs-up"></i></h5>
+                <p>5</p>
+            </div>
+            <div>
+                <h5 class='pointer'>Comments</h5>
+                <p>2</p>
+            </div>
+        </div>
+        </div>
+        
+        
+    </div>
+    {% endfor %}
+    
+    {% if posts.count == 0 %}
+    <h1 class='text-center ' style='color:#ffffff;border:3px  #ffffff;'>No Post</h1>
+    {% endif %}
+  </div>
+{% endblock body %}

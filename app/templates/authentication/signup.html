@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}   
+{% load static %}
+
+
+{% block body %}
+  <div class='container py-5 '>
+    <div class="card auth-card m-auto my-auto">
+        <div class="card-header">
+         <h4 class='m-0'> Create Account </h4>
+        </div>
+        <div class="card-body">
+            <form method='POST' action=''>
+                {% csrf_token %}
+                <div class="mb-4  input">
+                    <label for="signup-username-input" class="form-label">Username Address</label>
+                    <input type="username" class="form-control" id="signup-username-input" name='username' placeholder="username" required>
+                </div>
+                <div class="mb-4 input">
+                    <label for="signup-password-input" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="signup-password-input" name='password' required>
+                </div>
+                <div class='d-flex justify-content-between align-items-center'>
+                    <a href="{% url 'app:login'  %}" class='light-color'>Are You Have Account</a>
+                    <button type="submit" class="btn _btn-primary">Signup</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+  </div>
+{% endblock body %}
