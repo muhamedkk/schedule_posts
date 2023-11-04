@@ -4,6 +4,15 @@
 
 
 {% block body %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}} m-0" style='text-align: center' role="alert" >
+            {{message}}
+        </div>
+    {% endfor %}
+{% endif %}
+
   <div class='container py-5 '>
     <div class="card auth-card m-auto my-auto">
         <div class="card-header">

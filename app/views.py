@@ -25,8 +25,6 @@ def date_validation(request,publishing_time):
 
 @login_required(login_url='/authentication/login')
 @csrf_exempt
-
-
 def profile(request):
     user = User.objects.get(id=request.user.id)
     user_posts = Post.objects.filter(author=user)
@@ -72,14 +70,18 @@ def login_fun(request,username,password):
     user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
     if user is not None:
         login(request, user)
+        return True
+    return False
 
     
 @csrf_exempt
 def _login(request):
     if request.method=='POST':
-        login_fun(request,request.POST['username'],password=request.POST['password'])
-        messages.success(request, 'welcome')
-        return redirect ('app:profile')
+        if login_fun(request,request.POST['username'],password=request.POST['password']):
+            messages.success(request, 'welcome')
+            return redirect ('app:profile')
+        messages.success(request, 'Username Or Password invalid')
+        return redirect ('app:login')
     return render ( request,'authentication/login.html')
 
 @csrf_exempt
@@ -87,10 +89,14 @@ def signup(request):
     if request.method=='POST':
         username = request.POST['username']
         password = request.POST['password']
-        new_user=User.objects.create_user(username=username,password=password)
-        login_fun(request,username,password=password)
-        messages.success(request, 'welcome')
-        return redirect ('app:profile')
+        try:
+            new_user=User.objects.create_user(username=username,password=password)
+            login_fun(request,username,password=password)
+            messages.success(request, 'welcome')
+            return redirect ('app:profile')
+        except:
+            messages.success(request, 'Username Is Existing')
+            return redirect ('app:login')
     return render ( request,'authentication/signup.html')
 
 @csrf_exempt
