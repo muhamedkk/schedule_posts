@@ -26,6 +26,7 @@ def date_validation(request,publishing_time):
 @login_required(login_url='/authentication/login')
 @csrf_exempt
 def profile(request):
+
     user = User.objects.get(id=request.user.id)
     user_posts = Post.objects.filter(author=user)
     if request.method=='POST':
