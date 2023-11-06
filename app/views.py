@@ -97,7 +97,7 @@ def signup(request):
             return redirect ('app:profile')
         except:
             messages.success(request, 'Username Is Existing')
-            return redirect ('app:login')
+            return redirect ('app:signup')
     return render ( request,'authentication/signup.html')
 
 @csrf_exempt

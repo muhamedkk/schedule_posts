@@ -151,7 +151,7 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
     "UpdatePostsTime":{
         "task":"app.tasks.update_posts_time",
-        'schedule':60.0,
+        'schedule':1.0,
     }
     
 }
